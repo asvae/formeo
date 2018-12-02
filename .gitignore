@@ -4,3 +4,4 @@ demo/assets/**/*.map
 demo/assets/formeo*
 dist/
 yarn-error.log
+.idea

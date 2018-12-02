@@ -135,7 +135,7 @@ const formeoOpts = {
   svgSprite: './assets/formeo-sprite.svg',
   // style: 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css',
   // debug: true,
-  sessionStorage: true,
+  sessionStorage: false,
   editPanelOrder: ['attrs', 'options'],
 }
 

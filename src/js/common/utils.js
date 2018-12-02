@@ -243,7 +243,7 @@ export const sessionStorage = Object.create(null, {
  * @return {String}      escaped html
  */
 export const escapeHtml = html => {
-  const escapeElement = document.createElement('textarea')
+  const escapeElement = document.createElement('div')
   escapeElement.textContent = html
   return escapeElement.innerHTML
 }

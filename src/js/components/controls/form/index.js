@@ -1,6 +1,7 @@
 import HiddenControl from './input.hidden'
 import NumberControl from './input.number'
 import TextAreaControl from './textarea'
+import WysiwygControl from './wysiwyg-editor'
 import TextControl from './input.text'
 import FileControl from './input.file'
 import SelectControl from './select'
@@ -20,4 +21,5 @@ export default [
   SelectControl,
   CheckboxGroupControl,
   RadioGroupControl,
+  WysiwygControl,
 ]

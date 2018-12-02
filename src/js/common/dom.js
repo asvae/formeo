@@ -515,7 +515,7 @@ class DOM {
    * @return {String}      parsed HTML
    */
   parsedHtml(html) {
-    const escapeElement = document.createElement('textarea')
+    const escapeElement = document.createElement('div')
     escapeElement.innerHTML = html
     return escapeElement.textContent
   }
