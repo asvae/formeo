@@ -227,6 +227,12 @@ export default class Field extends Component {
       _this.resizePanelWrap = editPanels.action.resize
       fieldEdit.action = {
         onRender: () => {
+          const componentId = this.data.meta.id
+          if (componentId === 'html-editor') {
+            console.log('this', this)
+            console.log('this.data.meta.id', )
+          }
+
           _this.resizePanelWrap()
           if (!editPanelLength) {
             const field = this.dom

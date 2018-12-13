@@ -1,19 +1,50 @@
 const isSite = window.location.href.indexOf('draggable.github.io') !== -1
 const container = document.querySelector('.build-form')
 const renderContainer = document.querySelector('.render-form')
+
 const external = {
   user: {
     isAuthenticated: true,
     userName: 'Kevin',
   },
 }
+
+const hasParentWithClass = (element, classname) => {
+  if (element.className && element.className.split(' ')
+    .indexOf(classname) >= 0) {
+    return true
+  }
+  return element.parentNode ? hasParentWithClass(element.parentNode, classname) : false
+}
+
+const getNonInitializedHtmlEditors =
+  () => {
+    const allHtmlEditors = Array.from(document.querySelectorAll('.html-editor'))
+    return allHtmlEditors
+      .filter(
+        htmlEditor => !htmlEditor.parentNode.querySelector('.fr-box'),
+      )
+  }
+
+const checkFroalaEditorInterval = setInterval(() => {
+  getNonInitializedHtmlEditors().forEach(htmlEditor => {
+    console.log('initiaizing froala editor', htmlEditor.getAttribute('value'))
+    htmlEditor.innerHTML = htmlEditor.getAttribute('value')
+    $(htmlEditor).froalaEditor({ toolbarInline: false })
+    // $(htmlEditor).froalaEditor('html.set', htmlEditor.getAttribute('value'))
+  })
+}, 1000)
+
 const formeoOpts = {
   editorContainer: '.build-form',
   i18n: {
     location: '../assets/lang',
   },
   actions: {
-    save: console.log,
+    save: (value) => {
+      console.log('value', value)
+      console.log('JSON.stringify(value)', JSON.stringify(value))
+    },
   },
   external,
   // allowEdit: false,
@@ -24,6 +55,22 @@ const formeoOpts = {
       // elements: ['button'],
     },
     elements: [
+      {
+        tag: 'textarea',
+        config: {
+          label: 'HTML Editor', // TODO Add translation
+        },
+        meta: {
+          group: 'common',
+          icon: 'upload',
+          id: 'html-editor',
+        },
+        attrs: {
+          required: false,
+          className: 'html-editor',
+          // style: 'display: none;'
+        },
+      },
       {
         tag: 'input',
         config: {
@@ -42,64 +89,7 @@ const formeoOpts = {
           required: true,
         },
       },
-      //     {
-      //   tag: 'input',
-      //   attrs: {
-      //     type: 'radio',
-      //     required: false
-      //   },
-      //   config: {
-      //     label: 'Radio Group',
-      //     disabledAttrs: ['type']
-      //   },
-      //   meta: {
-      //     group: 'common',
-      //     icon: 'radio-group',
-      //     id: 'radio'
-      //   },
-      //   options: (() => {
-      //     let options = [1, 2, 3].map(i => {
-      //       return {
-      //         label: 'Radio ' + i,
-      //         value: 'radio-' + i,
-      //         selected: false
-      //       };
-      //     });
-      //     let otherOption = {
-      //         label: 'Other',
-      //         value: 'other',
-      //         selected: false
-      //       };
-      //     options.push(otherOption);
-      //     return options;
-      //   })(),
-      //   action: {
-      //     mouseover: evt => {
-      //       console.log(evt);
-      //       const {target} = evt;
-      //       if (target.value === 'other') {
-      //         const otherInput = target.cloneNode(true);
-      //         otherInput.type = 'text';
-      //         target.parentElement.appendChild(otherInput);
-      //       }
-      //     }
-      //   }
-      // },
     ],
-    elementOrder: {
-      common: [
-        'button',
-        'checkbox',
-        'date-input',
-        'hidden',
-        'upload',
-        'number',
-        'radio',
-        'select',
-        'text-input',
-        'textarea',
-      ],
-    },
   },
   config: {
     fields: {
@@ -128,133 +118,115 @@ const formeoOpts = {
       },
     },
   },
-  // events: {
-  // onUpdate: console.log,
-  // onSave: console.log
-  // },
-  svgSprite: './assets/formeo-sprite.svg',
-  // style: 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css',
-  // debug: true,
   sessionStorage: false,
   editPanelOrder: ['attrs', 'options'],
 }
 
-const formeo = new window.FormeoEditor(formeoOpts)
-const renderOptions = {
-  container: renderContainer,
-  external,
-}
-
-const renderer = new window.FormeoRenderer(renderOptions)
-
-document.addEventListener(
-  'formeoUpdated',
-  evt => {
-    renderer.render(formeo.formData)
+const formeo = new window.FormeoEditor(
+  formeoOpts,
+  {
+    'id': '79ccb528-61ed-4dcb-8687-5b9720fb13cf',
+    'stages': {
+      '118ce2f3-d4e4-4ce5-8951-4e56a214e565': {
+        'children': ['0572d6fa-e854-4e64-a7bd-2cbff3f60a00'],
+        'id': '118ce2f3-d4e4-4ce5-8951-4e56a214e565',
+      },
+    },
+    'rows': {
+      '0572d6fa-e854-4e64-a7bd-2cbff3f60a00': {
+        'config': {
+          'fieldset': false,
+          'legend': '',
+          'inputGroup': false,
+        },
+        'children': ['61f528e7-a35f-47ad-8aba-9949ed98a02b'],
+        'className': ['f-row'],
+        'id': '0572d6fa-e854-4e64-a7bd-2cbff3f60a00',
+      },
+    },
+    'columns': {
+      '61f528e7-a35f-47ad-8aba-9949ed98a02b': {
+        'config': { 'width': '100%' },
+        'children': ['43723499-41e7-4014-9291-b5195feef450', '3f72d22d-5578-46df-b4ca-d63c2f39fc60'],
+        'className': 'f-column',
+        'id': '61f528e7-a35f-47ad-8aba-9949ed98a02b',
+      },
+    },
+    'fields': {
+      '43723499-41e7-4014-9291-b5195feef450': {
+        'conditions': [{
+          'if': [{
+            'source': '',
+            'sourceProperty': 'value',
+            'comparison': 'equals',
+            'target': '',
+            'targetProperty': 'value',
+          }],
+          'then': [{
+            'target': '',
+            'targetProperty': 'value',
+            'assignment': 'equals',
+            'value': '',
+          }],
+        }],
+        'tag': 'textarea',
+        'config': { 'label': 'HTML Editor' },
+        'meta': { 'group': 'common', 'icon': 'upload', 'id': 'html-editor' },
+        'attrs': {
+          'required': false,
+          'className': 'html-editor',
+          'value': '<p>S<strong>ome te</strong>xt&nbsp;</p><p>So<strong>me te</strong>xt</p><p>S<strong>ome te</strong>xt more<br></p>',
+        },
+        'id': '43723499-41e7-4014-9291-b5195feef450',
+      },
+      '39a6ffa9-31ad-4e4e-8d65-9704df9e4d2e': {
+        'conditions': [{
+          'if': [{
+            'source': '',
+            'sourceProperty': 'value',
+            'comparison': 'equals',
+            'target': '',
+            'targetProperty': 'value',
+          }],
+          'then': [{
+            'target': '',
+            'targetProperty': 'value',
+            'assignment': 'equals',
+            'value': '',
+          }],
+        }],
+        'tag': 'textarea',
+        'config': { 'label': 'HTML Editor' },
+        'meta': { 'group': 'common', 'icon': 'upload', 'id': 'html-editor' },
+        'attrs': { 'required': false, 'className': 'html-editor' },
+        'id': '39a6ffa9-31ad-4e4e-8d65-9704df9e4d2e',
+      },
+      '3f72d22d-5578-46df-b4ca-d63c2f39fc60': {
+        'conditions': [{
+          'if': [{
+            'source': '',
+            'sourceProperty': 'value',
+            'comparison': 'equals',
+            'target': '',
+            'targetProperty': 'value',
+          }],
+          'then': [{
+            'target': '',
+            'targetProperty': 'value',
+            'assignment': 'equals',
+            'value': '',
+          }],
+        }],
+        'tag': 'textarea',
+        'config': { 'label': 'HTML Editor' },
+        'meta': { 'group': 'common', 'icon': 'upload', 'id': 'html-editor' },
+        'attrs': {
+          'required': false,
+          'className': 'html-editor',
+          'value': '<p>Let\'s add some more text</p>',
+        },
+        'id': '3f72d22d-5578-46df-b4ca-d63c2f39fc60',
+      },
+    },
   },
-  false
 )
-console.log(formeo)
-let editing = true
-
-const localeSelect = document.getElementById('locale')
-
-const buttonActions = {
-  logJSON: () => console.log(formeo.json),
-  reloadBtn: () => {
-    window.sessionStorage.removeItem('formeo-formData')
-    window.location.reload()
-  },
-  renderForm: evt => {
-    document.body.classList.toggle('form-rendered', editing)
-    if (editing) {
-      renderer.render(formeo.formData)
-      evt.target.innerHTML = 'Edit Form'
-    } else {
-      evt.target.innerHTML = 'Render Form'
-    }
-    editing = !editing
-
-    return editing
-  },
-  viewData: () => {
-    const formData = formeo.formData
-    Object.entries(formData).forEach(([key, val]) => console.log(key, val))
-  },
-}
-
-Object.entries(buttonActions).forEach(([key, val]) => {
-  const button = document.getElementById(key)
-  button.addEventListener('click', val, false)
-})
-
-const formeoLocale = window.sessionStorage.getItem('formeo-locale')
-if (formeoLocale) {
-  localeSelect.value = formeoLocale
-}
-
-localeSelect.addEventListener('change', function() {
-  window.sessionStorage.setItem('formeo-locale', localeSelect.value)
-  formeo.i18n.setLang(localeSelect.value)
-})
-
-document.getElementById('control-filter').addEventListener('input', function(e) {
-  formeo.controls.actions.filter(e.target.value)
-})
-
-if (isSite) {
-  ;((window.gitter = {}).chat = {}).options = {
-    room: 'draggable/formeo',
-  }
-
-  // Gitter
-  ;(function(d) {
-    const js = d.createElement('script')
-    js.src = '//sidecar.gitter.im/dist/sidecar.v1.js'
-    d.body.appendChild(js)
-  })(document)
-
-  // Facepoop
-  ;(function(d, s, id) {
-    let js,
-      fjs = d.getElementsByTagName(s)[0]
-    if (d.getElementById(id)) {
-      return
-    }
-    js = d.createElement(s)
-    js.id = id
-    js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=940846562669162'
-    fjs.parentNode.insertBefore(js, fjs)
-  })(document, 'script', 'facebook-jssdk')
-
-  // Twitter
-  ;(function(d, s, id) {
-    let js,
-      fjs = d.getElementsByTagName(s)[0],
-      p = /^http:/.test(d.location) ? 'http' : 'https'
-    if (!d.getElementById(id)) {
-      js = d.createElement(s)
-      js.id = id
-      js.src = p + '://platform.twitter.com/widgets.js'
-      fjs.parentNode.insertBefore(js, fjs)
-    }
-  })(document, 'script', 'twitter-wjs')
-
-  // Google analytics
-  ;(function(i, s, o, g, r, a, m) {
-    i.GoogleAnalyticsObject = r
-    ;(i[r] =
-      i[r] ||
-      function() {
-        ;(i[r].q = i[r].q || []).push(arguments)
-      }),
-      (i[r].l = 1 * new Date())
-    ;(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0])
-    a.async = 1
-    a.src = g
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga')
-
-  ga('create', 'UA-79014176-2', 'auto')
-  ga('send', 'pageview')
-}
